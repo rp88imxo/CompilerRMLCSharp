@@ -1,0 +1,7 @@
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\bin\Debug\CompilerRMLCSharp.exe.config
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\bin\Debug\CompilerRMLCSharp.exe
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\bin\Debug\CompilerRMLCSharp.pdb
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\obj\Debug\CompilerRMLCSharp.csprojAssemblyReference.cache
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\obj\Debug\CompilerRMLCSharp.csproj.CoreCompileInputs.cache
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\obj\Debug\CompilerRMLCSharp.exe
+M:\MyStuff\Stuff\4SEMESTR\SPO\MyCompiler\CompilerRMLCSharp\CompilerRMLCSharp\obj\Debug\CompilerRMLCSharp.pdb
