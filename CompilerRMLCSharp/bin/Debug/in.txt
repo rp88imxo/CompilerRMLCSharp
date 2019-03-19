@@ -1,4 +1,4 @@
 program mars;
-beginawr
+begin
 
 end.
