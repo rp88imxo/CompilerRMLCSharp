@@ -1,14 +1,106 @@
 program binarySort;
 const
-	s = '242424';
+	size : Word = 256;
+type
+	arr = array[0..256] of Integer;
+var
+	a : arr;
+
+function binarySearch(a : arr; item, low, high : Integer): Integer;
+var
+	mid : Integer;
 begin
-	exit(); 
-	x := 23 + 6 * (12 + 2);
-	#
-	if (x == 5) then
+	if high <= low then
 	begin
-		x := x + 5;
+		if item > a[low] then
+		begin
+			binarySearch := low + 1;
+			exit;
+		end
+			else
+			begin
+				binarySearch := low;
+				exit;
+			end;
 	end;
-	writeln('x + 5 = ', x);
-end .
+	
+	mid := (low + high) div 2;
+
+	if item = a[mid] then
+	begin
+		binarySearch := mid + 1;
+		exit;
+	end;
+		
+
+	if (item > a[mid]) then
+	begin
+	binarySearch := binarySearch(a, item, mid + 1, high);
+		exit;
+	end;
+		
+
+	binarySearch := binarySearch(a, item, low, mid - 1);
+end;
+
+procedure iForm(var a : arr; size : Integer);
+var
+	i : Integer;
+begin
+	for i := 0 to size - 1 do
+	begin
+		write('a[',i,']= ');
+		readln(a[i]);
+	end;
+end;
+
+procedure iOut(a : arr; size : Integer);
+var
+	i : Integer;
+begin
+	for i := 0 to size - 1 do
+		writeln(a[i], ' ');
+end;
+
+
+procedure iSort(var a : arr; size : Integer);
+var
+	i, loc, j, k, selected : Integer;
+begin
+
+
+
+	for i := 1 to size - 1 do
+		begin
+			j := i - 1;
+			selected := a[i];
+
+			// Find loc where selected should be inserted
+			loc := binarySearch(a, selected, 0, j);
+
+			// Move all elements after location to create space
+
+			while j >= loc do
+				begin
+					a[j + 1] := a[j];
+					j := j - 1;
+				end;
+			a[j + 1] := selected;
+		end;
+
+end;
+
+
+begin
+	write('Input size: ');
+	readln(size);
+
+	iForm(a,size);
+
+	iSort(a, size);
+
+	writeln;
+	
+	iOut(a, size);
+	readln;
 end.

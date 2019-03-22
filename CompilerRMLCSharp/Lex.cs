@@ -260,6 +260,8 @@ namespace CompilerRMLCSharp
                 case (int)LexState.COMPARE_MORE:
                 case (int)LexState.SIGN_QUOTE:
                 case (int)LexState.SIGN_COMMA:
+                case (int)LexState.SIGN_QUADRO_BRACE_CLOSING:
+                case (int)LexState.SIGN_QUADRO_BRACE_OPENING:
                     return (int)LexState.TABLE_SIGN;
                 case (int)LexState.ERROR:
                     return (int)LexState.TABLE_ERROR;
@@ -701,6 +703,10 @@ namespace CompilerRMLCSharp
                         return (int)LexState.SIGN_QUOTE;
                     if (ch == ',')
                         return (int)LexState.SIGN_COMMA;
+                    if (ch == '[')
+                        return (int)LexState.SIGN_QUADRO_BRACE_OPENING;
+                    if (ch == ']')
+                        return (int)LexState.SIGN_QUADRO_BRACE_CLOSING;
                     return 0;
             }
             return 0;
@@ -809,6 +815,8 @@ namespace CompilerRMLCSharp
 
         SIGN_QUOTE,
         SIGN_COMMA,
+        SIGN_QUADRO_BRACE_OPENING,
+        SIGN_QUADRO_BRACE_CLOSING,
 
         ID = -6,
         ERROR = 0,
