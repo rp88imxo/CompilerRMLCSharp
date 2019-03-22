@@ -610,8 +610,6 @@ namespace CompilerRMLCSharp
                         return 4;
                     if (char.IsDigit(ch))
                         return 2;
-                    if (ch == '.')
-                        return 3;
                     return 0;
                 case 2:
                     if (char.IsDigit(ch))
@@ -626,14 +624,6 @@ namespace CompilerRMLCSharp
                 case -2:
                     if (char.IsDigit(ch))
                         return -2;
-                    return 0;
-                case 3:
-                    if (char.IsDigit(ch))
-                        return -3;
-                    return 0;
-                case -3:
-                    if (char.IsDigit(ch))
-                        return -3;
                     return 0;
                 case 4:
                     if (ch == '.')
