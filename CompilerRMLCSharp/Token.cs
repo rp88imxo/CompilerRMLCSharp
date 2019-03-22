@@ -10,11 +10,12 @@ namespace CompilerRMLCSharp
     {
         private int startingPosition;
         private int endingPosition;
+        public string name { get; private set; }
 
         public int state { private set; get; }
 
         private int index;
-        private int numberOfTable;
+        public int numberOfTable { private set; get; }
 
         // Инициализация лексемы в конструкторе
         public Token(
@@ -22,13 +23,15 @@ namespace CompilerRMLCSharp
             int end, 
             int ind, 
             int numberOfTable, 
-            int state)
+            int state,
+            string name)
         {
             startingPosition = start;
             endingPosition = end;
             index = ind;
             this.numberOfTable = numberOfTable;
             this.state = state;
+            this.name = name;
         }
 
         

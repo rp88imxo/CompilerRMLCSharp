@@ -25,8 +25,8 @@ namespace CompilerRMLCSharp
         private string code;
         private int length;
 
-        // TODO: HashTables
-        private List<HashTable> tables;
+        // Временно сделал паблик для дебаггинга
+        public List<List<string>> tables;
 
         public Lex(string code)
         {
@@ -36,17 +36,17 @@ namespace CompilerRMLCSharp
             length = code.Length;
 
             // Список хеш-таблиц
-            tables = new List<HashTable>((short)LexState.LENGTH);
+            tables = new List<List<string>>();
 
             for (int i = 0; i < (short)LexState.LENGTH; i++)
-                tables.Add(new HashTable(length * 16));
+                tables.Add(new List<string>());
             
             states = initStates();
         }
 
         private int[] initStates()
         {
-            int[] arr = new int[(short)LexState.LENGTH];
+            int[] arr = new int[(short)LexState.LENGTH - 1];
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = 1;
             return arr;     
@@ -66,9 +66,15 @@ namespace CompilerRMLCSharp
                     {
                         int numberOfTable = getNumberOfTable(0);
                         int index = -1;
-                        tables[numberOfTable].Insert(code.Substring(startingPosition, startingPosition + 1));
 
-                        Token token = new Token(startingPosition, startingPosition + 1, index, numberOfTable, 0);
+                        string str = code.Substring(
+                            startingPosition, lastPositionWithFinalState + 1 - startingPosition <= 0 ?
+                            1 : lastPositionWithFinalState + 1 - startingPosition);
+
+                        tables[numberOfTable].Add(str);
+
+                        // Нужно поправить так как я зачем то сделал то что и идентификатор ошибок и тип INT совпадают =-=
+                        Token token = new Token(startingPosition, startingPosition + 1, index, numberOfTable, 0, str);
 
                         states = initStates();
                         i = startingPosition;
@@ -87,9 +93,10 @@ namespace CompilerRMLCSharp
                         if (lastFinalState == (int)LexState.ID)
                             str = stringRestricter(str);
                         int index = -1;
-                        index = tables[numberOfTable].Insert(str);
+                        tables[numberOfTable].Add(str);
+                        index = tables[numberOfTable].IndexOf(str);
 
-                        Token token = new Token(startingPosition, lastPositionWithFinalState + 1, index, numberOfTable, lastFinalState);
+                        Token token = new Token(startingPosition, lastPositionWithFinalState + 1, index, numberOfTable, lastFinalState, str);
 
                         lastFinalState = 0;
                         i = lastPositionWithFinalState;
@@ -123,9 +130,10 @@ namespace CompilerRMLCSharp
                     str = stringRestricter(str);
                 }
 
-                index = tables[numberOfTable].Insert(str);
+                tables[numberOfTable].Add(str);
+                index = tables[numberOfTable].IndexOf(str);
 
-                Token token = new Token(startingPosition, lastPositionWithFinalState + 1, index, numberOfTable, lastFinalState);
+                Token token = new Token(startingPosition, lastPositionWithFinalState + 1, index, numberOfTable, lastFinalState, str);
                 lastFinalState = 0;
                 return token;
             }
@@ -195,6 +203,7 @@ namespace CompilerRMLCSharp
         // Определенной лексемы
         private int getNumberOfTable(int state)
         {
+
             switch (state)
             {
 
@@ -240,6 +249,17 @@ namespace CompilerRMLCSharp
                 case (int)LexState.OPENING_ROUND_BRACE:
                 case (int)LexState.CLOSING_ROUND_BRACE:
                 case (int)LexState.SEMICOLON:
+                case (int)LexState.DOT:
+                case (int)LexState.DOUBLE_DOT:
+                case (int)LexState.EQUALITY:
+                case (int)LexState.ARIFMETIC_DIV:
+                case (int)LexState.ARIFMETIC_MINUS:
+                case (int)LexState.ARIFMETIC_MULT:
+                case (int)LexState.ARIFMETIC_PLUS:
+                case (int)LexState.COMPARE_LESS:
+                case (int)LexState.COMPARE_MORE:
+                case (int)LexState.SIGN_QUOTE:
+                case (int)LexState.SIGN_COMMA:
                     return (int)LexState.TABLE_SIGN;
                 case (int)LexState.ERROR:
                     return (int)LexState.TABLE_ERROR;
@@ -650,25 +670,37 @@ namespace CompilerRMLCSharp
             {
                 case 1:
                     if (ch == ';')
-                    {
                         return (int)LexState.SEMICOLON;
-                    }
                     if (ch == '{')
-                    {
                         return (int)LexState.OPENING_CURLY_BRACE;
-                    }
                     if (ch == '}')
-                    {
                         return (int)LexState.CLOSING_CURLY_BRACE;
-                    }
                     if (ch == '(')
-                    {
                         return (int)LexState.OPENING_ROUND_BRACE;
-                    }
                     if (ch == ')')
-                    {
                         return (int)LexState.CLOSING_ROUND_BRACE;
-                    }
+                    if (ch == '=')
+                        return (int)LexState.EQUALITY;
+                    if (ch == ':')
+                        return (int)LexState.DOUBLE_DOT;
+                    if (ch == '.')
+                        return (int)LexState.DOT;
+                    if (ch == '+')
+                        return (int)LexState.ARIFMETIC_PLUS;
+                    if (ch == '-')
+                        return (int)LexState.ARIFMETIC_MINUS;
+                    if (ch == '*')
+                        return (int)LexState.ARIFMETIC_MULT;
+                    if (ch == '/')
+                        return (int)LexState.ARIFMETIC_DIV;
+                    if (ch == '>')
+                        return (int)LexState.COMPARE_MORE;
+                    if (ch == '<')
+                        return (int)LexState.COMPARE_LESS;
+                    if (ch == '\'')
+                        return (int)LexState.SIGN_QUOTE;
+                    if (ch == ',')
+                        return (int)LexState.SIGN_COMMA;
                     return 0;
             }
             return 0;
@@ -724,7 +756,7 @@ namespace CompilerRMLCSharp
     // Состояния для автомата
     public enum LexState
     {
-        LENGTH = 6,
+        LENGTH = 7,
         SPACE = -13,
 
         #region Ключевые слова
@@ -755,27 +787,42 @@ namespace CompilerRMLCSharp
         EXIT_KEYWORD,
         #endregion
 
-
-
         OPENING_CURLY_BRACE = -14,
         CLOSING_CURLY_BRACE = -15,
         OPENING_ROUND_BRACE = -16,
         CLOSING_ROUND_BRACE = -17,
         SEMICOLON = -18,
         INT = -19,
+        DOUBLE_DOT = -20,
+        DOT = -21,
+        EQUALITY = -22,
+
+
+        // Другие знаки, которые я забыл добавить до этого
+        ARIFMETIC_PLUS = - 10000,
+        ARIFMETIC_MINUS,
+        ARIFMETIC_MULT,
+        ARIFMETIC_DIV,
+
+        COMPARE_MORE,
+        COMPARE_LESS,
+
+        SIGN_QUOTE,
+        SIGN_COMMA,
+
         ID = -6,
         ERROR = 0,
         TABLE_INT = 0,
-        TABLE_ID = 1,
-        TABLE_KEYWORD = 2,
-        TABLE_REAL = 3,
-        TABLE_SPACE = 4,
-        TABLE_SIGN = 5,
-        TABLE_ERROR = 6,
-        MAX_ID_LENGTH = 7
+        TABLE_ID ,
+        TABLE_KEYWORD,
+        TABLE_REAL ,
+        TABLE_SPACE,
+        TABLE_SIGN ,
+        TABLE_ERROR ,
+        MAX_ID_LENGTH = 69
     }
 
-    class Node<T>
+    public class Node<T>
     {
         public T Value { get; private set; }
         public Node<T> Next { get; set; }
@@ -788,7 +835,7 @@ namespace CompilerRMLCSharp
 
     }
 
-    class ListNode<T> : IEnumerable<T>
+    public class ListNode<T> : IEnumerable<T>
     {
         Node<T> head;
         Node<T> last;
@@ -823,7 +870,7 @@ namespace CompilerRMLCSharp
 
     }
 
-    class HashTable
+    public class HashTable
     {
         public int Key { get; private set; }
 

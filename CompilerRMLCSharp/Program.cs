@@ -22,7 +22,7 @@ namespace CompilerRMLCSharp
 
             Lex lex = new Lex(source);
             List<Token> tokens = new List<Token>();
-
+           
             try
             {
                 while (true)
@@ -37,9 +37,17 @@ namespace CompilerRMLCSharp
                 ConsoleSetup(ConsoleColor.Green);
                 foreach (var token in tokens)
                 {
+                    if (token.numberOfTable != (int)LexState.TABLE_ERROR)
                     Console.WriteLine("\t\t" + (LexState)token.state);
                 }
-
+                
+                ConsoleSetup(ConsoleColor.Cyan);
+                Console.WriteLine("Ошибки:");
+                foreach (var item in lex.tables[6])
+                {
+                    Console.Write(item + " ");
+                }
+                
 
                 ConsoleSetup(ConsoleColor.Red);
                 Console.WriteLine("\nОшибка: " + ex.Message);

@@ -1,4 +1,14 @@
-program mars;
+program binarySort;
+const
+	s = '242424';
 begin
-
+	exit(); 
+	x := 23 + 6 * (12 + 2);
+	#
+	if (x == 5) then
+	begin
+		x := x + 5;
+	end;
+	writeln('x + 5 = ', x);
+end .
 end.
