@@ -47,7 +47,9 @@ namespace CompilerRMLCSharp
                 {
                     Console.Write(item + " ");
                 }
-                
+
+               
+
 
                 ConsoleSetup(ConsoleColor.Red);
                 Console.WriteLine("\nОшибка: " + ex.Message);

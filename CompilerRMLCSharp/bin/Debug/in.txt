@@ -2,7 +2,7 @@ program binarySort;
 const
 	size : Word = 256;
 type
-	arr = array[0..256] of Integer;
+	arr = array[0..256] of Real;
 var
 	a : arr;
 
@@ -103,4 +103,6 @@ begin
 	
 	iOut(a, size);
 	readln;
+	2.56
+	8.23E-5
 end.

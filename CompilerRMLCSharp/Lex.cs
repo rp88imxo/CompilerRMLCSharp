@@ -236,6 +236,7 @@ namespace CompilerRMLCSharp
                 case (int)LexState.PROCEDURE_KEYWORD:
                 case (int)LexState.XOR_KEYWORD:
                 case (int)LexState.EXIT_KEYWORD:
+                case (int)LexState.INT_KEYWORD:
                     return (int)LexState.TABLE_KEYWORD;
                 case -1:
                 case -2:
@@ -353,7 +354,8 @@ namespace CompilerRMLCSharp
                         return 40;
                     if (rch == 'x')
                         return 53;
-                    
+                    if (rch == 'r')
+                        return 57;
                     return 0;
                 case 2:
                     if (rch == 'n')
@@ -423,6 +425,8 @@ namespace CompilerRMLCSharp
                 case 17:
                     if (rch == 'f')
                         return (int)LexState.IF_KEYWORD;
+                    if (rch == 'n')
+                        return 60;
                     return 0;
                 case 18:
                     if (rch == 'o')
@@ -593,6 +597,38 @@ namespace CompilerRMLCSharp
                 case 56:
                     if (rch == 't')
                         return (int)LexState.EXIT_KEYWORD;
+                    return 0;
+                case 57:
+                    if (rch == 'e')
+                        return 58;
+                    return 0;
+                case 58:
+                    if (rch == 'a')
+                        return 59;
+                    return 0;
+                case 59:
+                    if (rch == 'l')
+                        return (int)LexState.REAL_KEYWORD;
+                    return 0;
+                case 60:
+                    if (rch == 't')
+                        return 61;
+                    return 0;
+                case 61:
+                    if (rch == 'e')
+                        return 62;
+                    return 0;
+                case 62:
+                    if (rch == 'g')
+                        return 63;
+                    return 0;
+                case 63:
+                    if (rch == 'e')
+                        return 64;
+                    return 0;
+                case 64:
+                    if (rch == 'r')
+                        return (int)LexState.INT_KEYWORD;
                     return 0;
                 default:
                     break;
@@ -781,6 +817,7 @@ namespace CompilerRMLCSharp
         PROCEDURE_KEYWORD,
         XOR_KEYWORD,
         EXIT_KEYWORD,
+        INT_KEYWORD,
         #endregion
 
         OPENING_CURLY_BRACE = -14,
