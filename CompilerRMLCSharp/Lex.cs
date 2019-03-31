@@ -162,8 +162,8 @@ namespace CompilerRMLCSharp
                 return states[1];
             }
 
-            //float
-            if (states[3] < 0)
+            //real
+            if (states[3] < 0 && states[3] != -1)
             {
                 return states[3];
             }
@@ -237,8 +237,9 @@ namespace CompilerRMLCSharp
                 case (int)LexState.XOR_KEYWORD:
                 case (int)LexState.EXIT_KEYWORD:
                 case (int)LexState.INT_KEYWORD:
+                case (int)LexState.TYPE_KEYWORD:
+                case (int)LexState.WHILE_KEYWORD:
                     return (int)LexState.TABLE_KEYWORD;
-                case -1:
                 case -2:
                 case -3:
                 case -4:
@@ -265,6 +266,7 @@ namespace CompilerRMLCSharp
                 case (int)LexState.SIGN_QUADRO_BRACE_OPENING:
                     return (int)LexState.TABLE_SIGN;
                 case (int)LexState.ERROR:
+                case -1:
                     return (int)LexState.TABLE_ERROR;
 
             }
@@ -356,6 +358,8 @@ namespace CompilerRMLCSharp
                         return 53;
                     if (rch == 'r')
                         return 57;
+                    if (rch == 'w')
+                        return 67;
                     return 0;
                 case 2:
                     if (rch == 'n')
@@ -449,6 +453,8 @@ namespace CompilerRMLCSharp
                         return (int)LexState.TO_KEYWORD;
                     if (rch == 'h')
                         return 23;
+                    if (rch == 'y')
+                        return 65;
                     return 0;
                 case 23:
                     if (rch == 'e')
@@ -630,13 +636,37 @@ namespace CompilerRMLCSharp
                     if (rch == 'r')
                         return (int)LexState.INT_KEYWORD;
                     return 0;
+                case 65:
+                    if (rch == 'p')
+                        return 66;
+                    return 0;
+                case 66:
+                    if (rch == 'e')
+                        return (int)LexState.TYPE_KEYWORD;
+                    return 0;
+                case 67:
+                    if (rch == 'h')
+                        return 68;
+                    return 0;
+                case 68:
+                    if (rch == 'i')
+                        return 69;
+                    return 0;
+                case 69:
+                    if (rch == 'l')
+                        return 70;
+                    return 0;
+                case 70:
+                    if (rch == 'e')
+                        return (int)LexState.WHILE_KEYWORD;
+                    return 0;
                 default:
                     break;
             }
             return (int)LexState.ERROR;
         }
 
-        // Проверка на действительное число, включая к примеру 25.E-3 или 12.e+25
+        // Проверка на действительное число
         private int identifyReal(char ch, int state)
         {
             switch (state)
@@ -667,26 +697,10 @@ namespace CompilerRMLCSharp
                     return 0;
                 case 5:
                     if (char.IsDigit(ch))
-                        return 6;
+                        return -2;
                     return 0;
-                case 6:
-                    if (char.IsDigit(ch))
-                        return 6;
-                    if (ch == 'e' || ch == 'E')
-                        return 7;
-                    return 0;
-                case 7:
-                    if (ch == '+' || ch == '-') 
-                        return 8;
-                    return 0;
-                case 8:
-                    if (char.IsDigit(ch))
-                        return -4;
-                    return 0;
-                case -4:
-                    if (char.IsDigit(ch))
-                        return -4;
-                    return 0;
+              
+
             }
             return 0;
         }
@@ -818,6 +832,8 @@ namespace CompilerRMLCSharp
         XOR_KEYWORD,
         EXIT_KEYWORD,
         INT_KEYWORD,
+        TYPE_KEYWORD,
+        WHILE_KEYWORD,
         #endregion
 
         OPENING_CURLY_BRACE = -14,
@@ -829,7 +845,7 @@ namespace CompilerRMLCSharp
         DOUBLE_DOT = -20,
         DOT = -21,
         EQUALITY = -22,
-
+        REAL = -2,
 
         // Другие знаки, которые я забыл добавить до этого
         ARIFMETIC_PLUS = - 10000,

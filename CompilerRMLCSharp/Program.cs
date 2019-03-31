@@ -37,7 +37,7 @@ namespace CompilerRMLCSharp
                 ConsoleSetup(ConsoleColor.Green);
                 foreach (var token in tokens)
                 {
-                    if (token.numberOfTable != (int)LexState.TABLE_ERROR)
+                    if (token.numberOfTable != (int)LexState.TABLE_ERROR && token.numberOfTable != (int)LexState.TABLE_SPACE)
                     Console.WriteLine("\t\t" + (LexState)token.state);
                 }
                 
